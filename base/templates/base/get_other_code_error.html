@@ -1,0 +1,24 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block body %}
+
+<!-- Body starts -->
+
+<main>
+    <div class="container" style="height: 100vh;">
+        <div class="main-container text-light d-flex justify-content-center align-items-center flex-column text-center h-100">
+            <span class="iconify w-25 h-25" data-icon="ic:round-private-connectivity"></span>
+            <h1>Oooops !</h1>
+            <p class="m-0">Requested < Code /> is in Private mode, you can't see it until the owner change it into public.</p>
+            <p class="m-0 mt-2">Contact owner : {{ code.user }}</p>
+            <p class="m-0">Public Mode: {{ code.private }}</p>
+            <a href="{% url 'index' %}" class="btn btn-sm btn-primary p-2 px-5 mt-4 fw-bold">Dashboard</a>
+        </div>
+    </div>
+</main>
+
+
+<!-- Body ends -->
+
+{% endblock %}

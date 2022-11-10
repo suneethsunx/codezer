@@ -1,0 +1,61 @@
+{% load static %}
+
+<footer class=" text-light pt-4">
+    <div class="container">
+
+        <!-- Footer top -->
+        <div class="footer_top">
+            <div class="row">
+                <div class="col-md-4 intro">
+                    <img src="{% static 'base/images/logo.png' %}" class="img-fluid w-50" alt="Logo">
+                    <p class="opacity-75 pt-2">Codezer is a free online tool for
+                        developers to organize your code.</p>
+                </div>
+                <div class="col-md-4 col-5 q_links">
+                    <h6 class="fs-6">Quick links</h5>
+                        <div class="links d-flex flex-column pt-2">
+                            <a href="{% url 'index' %}">
+                                Dashboard
+                            </a>
+                            <a href="{% url 'logout' %}">
+                                Logout
+                            </a>
+                        </div>
+                </div>
+                <div class="col-md-4 col-7 contact_me">
+                    <h6 class="fs-6">Contact me</h5>
+                        <div class="links d-flex flex-column pt-2">
+                            <a href="https://www.instagram.com/sunee__th/" class="w-100 d-flex justify-content-between align-items-center">
+                                Instagram : @sunee__th
+                                <span class="iconify" data-icon="akar-icons:instagram-fill"></span>
+                            </a>
+                            <a href="https://twitter.com/Suneethsuresh7" class="w-100 d-flex justify-content-between align-items-center">
+                                Twitter : @Suneethsuresh7
+                                <span class="iconify" data-icon="iconoir:twitter"></span>
+                            </a>
+                            <a href="https://www.linkedin.com/in/suneeth-suresh-9936a1256/" class="w-100 d-flex justify-content-between align-items-center">
+                                LinkedIn : @Suneeth Suresh
+                                <span class="iconify" data-icon="jam:linkedin-square"></span>
+                            </a>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer top -->
+
+    <!-- Footer bottom -->
+    <div class="footer_bottom py-4">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="left">
+                <p class="opacity-75">Copyright @ codezer</p>
+            </div>
+            <div class="right">
+                <p class="opacity-75">Site designed and developed by Suneeth with ♥</p>
+            </div>
+        </div>
+    </div>
+    <!-- Footer bottom -->
+
+
+</footer>

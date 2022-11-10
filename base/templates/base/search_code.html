@@ -1,0 +1,102 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block body %}
+
+{% if messages %}
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast text-bg-primary" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex justify-content-between align-items-center">
+            {% for message in messages %}
+            <div class="toast-body">
+                {{ message }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+
+<!-- Navabar section starts -->
+
+{% include 'base/navbar.html' %}
+
+<!-- Navabar section ends -->
+
+
+
+<!-- Body section starts -->
+
+<main class=" text-light">
+    <section class="container body-section py-5">
+
+        <!-- Hero section -->
+        <div class="hero_div">
+            <div class="body">
+                <h3 class="fs-4 fw-bolder">Showing search results for ~ {{ global_query }}</h3>
+            </div>
+        </div>
+
+        <!-- Hero section -->
+
+        <!-- Dashboard section -->
+
+        <div class="files animate__animated animate__headShake">
+            <div class="row">
+                {% if codes %}
+                {% for code in codes %}
+                <div class="col-md-3 col-6 pt-4">
+                    <a href="{% url 'get-other-code' code.link_id %}" class="text-decoration-none text-light">
+                        <div data-codeId="{{ code.id }}"
+                            class="card-body rounded p-3 d-flex justify-content-center align-items-center flex-column gap-3">
+                            <span class="iconify text-primary" data-icon="octicon:file-code-16"></span>
+                            <h5><span># </span>{{ code.title | truncatechars:25 }}</h5>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty w-100 d-flex justify-content-center">
+                    <div class="box w-50 d-flex justify-content-center align-items-center flex-column gap-3">
+                        <img src="{% static 'base/images/empty-code.png' %}" class="img-fluid w-25 opacity-75"
+                            alt="Empty">
+                        <h5 class="text-secondary">Empty !</h5>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+        <!-- Dashboard section -->
+
+        <div class="footer mt-5">
+            {% if codes %}
+            <p>Showing the codes related with the name ( {{ query }} ). These codes are in Public mode, only codes in public mode is showing.
+                You can see more details by clicking the code.
+            </p>
+            {% else %}
+            <h5>Ooops !</h5>
+            <p>There is no codes with name ( {{ query }} ). Try searching with another keyword.</p>
+            {% endif %}
+        </div>
+
+
+    </section>
+</main>
+
+<!-- Footer starts -->
+
+{% include 'base/footer.html' %}
+
+
+<!-- Footer ends -->
+
+
+
+{% endblock %}

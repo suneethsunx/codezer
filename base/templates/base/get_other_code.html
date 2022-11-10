@@ -1,0 +1,73 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block body %}
+
+<!-- Navabr starts -->
+{% include 'base/navbar.html' %}
+<!-- Navbar ends -->
+
+<!-- Body starts -->
+
+<main>
+    <section class="code_section text-light py-5">
+        <div class="container">
+            <div class="code-container">
+                <div class="code-header">
+                    <h4 class="p-0 m-0">Filename: <span id="show_filename">{{ code.title }}</span></h4>
+                    <h5>Code owner: {{ code.user }}</h5>
+                    <h6 class="opacity-75 fw-normal m-0">Created at : {{ code.created_at }}</h6>
+
+                    <div class="code">
+                        <button id="copybtn" class="btn btn-secondary btn-sm d-flex align-items-center gap-2">
+                            <span class="iconify" data-icon="akar-icons:copy"></span>Copy</button>
+                        <pre class="d-flex w-100 mt-4">
+                            <code class="rounded w-100" id="show_code">
+{{ code.code }}
+                            </code>
+                        </pre>
+                        <div class="max-btn">
+                            <div class="btn btn-secondary p-2 px-4" onclick="maxCode()">
+                                <span class="iconify fw-normal" data-icon="fa6-solid:arrow-down-up-across-line"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<!-- Body ends -->
+
+<!-- Footer starts -->
+
+{% include 'base/footer.html' %}
+
+<!-- Footer ends -->
+
+<script>
+
+
+    function maxCode() {
+        let code = document.querySelector('#show_code')
+        code.classList.toggle('h-100')
+    }
+
+
+    const copyBtn = document.getElementById('copybtn')
+
+    copyBtn.addEventListener('click', () => {
+        var codetext = document.querySelector('#show_code').textContent
+
+        navigator.clipboard.writeText(codetext)
+        copyBtn.innerHTML = "Copied !"
+    })
+
+
+
+    hljs.highlightAll();
+</script>
+
+{% endblock %}

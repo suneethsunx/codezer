@@ -1,0 +1,307 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block body %}
+
+<!-- Navabr starts -->
+{% include 'base/navbar.html' %}
+<!-- Navbar ends -->
+
+<!-- Body starts -->
+
+<main>
+    <section class="code_section text-light py-5">
+        <div class="container">
+            <div class="code-container">
+                <div class="code-header">
+                    <h4 class="p-0 m-0">Filename: <span id="show_filename">{{ code.title }}</span></h4>
+                    <h6 class="opacity-75 fw-normal m-0">Created : {{ code.created_at| timesince }} ago</h6>
+
+                    <div class="options mt-3 d-flex justify-content-between align-items-end">
+                        <div class="left">
+                            {% if code.private %}
+                            <p class="m-0 text-muted fw-normal">Make you code public to get link !</p>
+                            {% else %}
+                            <p class="m-0 text-muted fw-normal">Share code with other developers</p>
+                            {% endif %}
+
+                            <div data-codeId="{{ code.id }}" id="code_link_btn"
+                                class="btn btn-primary btn-sm p-2 px-4 fw-bold {% if code.private %} disabled {% endif %}">
+                                Get code link 🔗</div>
+                        </div>
+                        <div class="right d-flex gap-3">
+                            <div id="update_btn" data-codeId="{{ code.id }}"
+                                class="btn btn-primary btn-sm p-2 px-4 fw-bold">Update code ⚙️</div>
+                            <div data-codeId="{{ code.id }}" id="code_delete"
+                                class="btn btn-danger btn-sm p-2 px-3 fw-bold">Delete</div>
+                        </div>
+                    </div>
+
+                    <div class="code">
+                        <button id="copybtn" class="btn btn-secondary btn-sm d-flex align-items-center gap-2">
+                            <span class="iconify" data-icon="akar-icons:copy"></span>Copy</button>
+                        <pre class="d-flex w-100 mt-4">
+                            <code class="rounded w-100" id="show_code">
+{{ code.code }}
+                            </code>
+                        </pre>
+                        <div class="max-btn">
+                            <div class="btn btn-secondary p-2 px-4" onclick="maxCode()">
+                                <span class="iconify fw-normal" data-icon="fa6-solid:arrow-down-up-across-line"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-body mt-5">
+                    {% if not code.private %}
+                    <h5>Mode: Public </h5>
+                    <p>This code is currently public. Anyone can access you code by link or by searching your code
+                        filename.
+                        You can change this to private by updating code. <br>
+                        For this click on the Update code button above the code.
+                    </p>
+                    {% else %}
+                    <h5>Mode: Private</h5>
+                    <p>This code is currently private. Only you can access this code and update it.
+                        You can change this to public by updating code. <br>
+                        For this click on the Update code button above the code.
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<!-- Body ends -->
+
+<!-- Footer starts -->
+
+{% include 'base/footer.html' %}
+
+<!-- Footer ends -->
+
+<!-- models starts  -->
+
+<!-- Add Edit code modal -->
+<div class="modal fade" id="editCodeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    Edit code
+                </h1>
+                <button class="text-white fs-5 bg-transparent" style="border: none;"><span class="iconify"
+                        data-bs-dismiss="modal" data-icon="ep:close-bold"></span></button>
+            </div>
+            <hr>
+            <div class="modal-body">
+                <div class="body-container">
+                    <div class="content">
+                        <form action="#">
+                            {% csrf_token %}
+                            <label for="edit_filename">File name:</label>
+                            <input id="edit_filename" type="text" value="" class="rounded w-100">
+
+                            <label class="mt-3" for="edit_code">Code :</label>
+                            <textarea class="rounded w-100" name="code" id="edit_code" cols="30" rows="10"
+                                placeholder="Paste your code here..."></textarea>
+                        </form>
+                        <div class="ratios mt-2">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" checked type="radio" name="public" id="inlineRadio1"
+                                    value="public">
+                                <label class="form-check-label" for="inlineRadio1">Public</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="public" id="inlineRadio2"
+                                    value="private">
+                                <label class="form-check-label" for="inlineRadio2">Private</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top: none;">
+                <button type="button" id="submit_btn"
+                    class="btn btn-primary px-5 fw-bold d-flex align-items-center gap-2">
+                    <span class="iconify" data-icon="fluent:phone-update-checkmark-20-regular"></span>Update
+                    code</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Get link code modal -->
+<div class="modal fade" id="getCodeLinkModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">
+
+                </h1>
+                <button class="text-white fs-5 bg-transparent" style="border: none;"><span class="iconify"
+                        data-bs-dismiss="modal" data-icon="ep:close-bold"></span></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="body-container">
+                    <div class="content">
+                        <p>🔗 Link has been created successfully! Now you can share this link with others to see your
+                            code.</p>
+                        <div class="link bg-secondary p-3 rounded position-relative">
+                            <div id="linkcopybtn"
+                                class="copy position-absolute end-0 top-50 p-2 btn btn-secondary rounded me-2 translate-middle-y">
+                                <span class="iconify" data-icon="akar-icons:copy"></span>
+                            </div>
+                            <span id="link">http://127.0.0.1:8000/get-code/<span id="code_link"></span>/</span>
+                        </div>
+                        <p class="mt-4">⚠️ This link didn't work when your code is in private mode. <br>
+                            Simply copy this link and share with other developers...</p>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="modal-footer" style="border-top: none;">
+                <button type="button" id="submit_btn"
+                    class="btn btn-primary px-5 fw-bold d-flex align-items-center gap-2">
+                    <span class="iconify" data-icon="fluent:phone-update-checkmark-20-regular"></span>Update
+                    code</button>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<!-- Models ends -->
+
+<script>
+
+    const csrftoken = '{{ csrf_token }}'
+
+    function maxCode() {
+        let code = document.querySelector('#show_code')
+        code.classList.toggle('h-100')
+    }
+
+    const codeDeleteBtn = document.querySelector('#code_delete')
+    codeDeleteBtn.addEventListener('click', () => {
+        const codeId = codeDeleteBtn.getAttribute('data-codeId')
+        console.log(codeId);
+
+        let url = `/api/code/delete/${codeId}/`
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            }
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                window.location = '/'
+            })
+    })
+
+    let currentId = ''
+
+    const updateCodeBtn = document.querySelector('#update_btn')
+    updateCodeBtn.addEventListener('click', () => {
+
+        let codeId = updateCodeBtn.getAttribute('data-codeId')
+        currentId = codeId
+
+        let url = `/api/code/${codeId}/`
+        fetch(url)
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+
+                $("#editCodeModal").modal('show');
+                document.querySelector('#edit_filename').value = data.title
+                document.querySelector('#edit_code').value = data.code
+            })
+
+
+        // document.querySelector('#edit_filename').value = filename
+        // document.querySelector('#edit_code').value = code
+    })
+
+    const updateBtn = document.querySelector('#submit_btn')
+    updateBtn.addEventListener('click', () => {
+
+        let scope = 'private'
+
+        let publicRatioInput = document.querySelector('input[name=public]:checked')
+        if (publicRatioInput.value === 'public') {
+            scope = 'public'
+        }
+
+        let url = `/api/code/update/${currentId}/`
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({
+                'filename': document.querySelector('#edit_filename').value,
+                'code': document.querySelector('#edit_code').value,
+                'scope': scope,
+            })
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                window.location.reload()
+            })
+    })
+
+
+
+    const codeLinkBtn = document.querySelector('#code_link_btn')
+    codeLinkBtn.addEventListener('click', () => {
+
+        currentId = codeLinkBtn.getAttribute('data-codeId')
+        $('#getCodeLinkModal').modal('show')
+
+        var url = `/api/code/${currentId}/`
+
+        fetch(url)
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                document.querySelector('#code_link').innerHTML = data.link_id
+            })
+    })
+
+    var linkCopyBtn = document.getElementById('linkcopybtn')
+
+    linkCopyBtn.addEventListener('click', () => {
+        var link = document.getElementById('link').textContent
+
+        navigator.clipboard.writeText(link)
+        linkCopyBtn.innerHTML = "Copied !"
+    })
+
+
+    const copyBtn = document.getElementById('copybtn')
+
+    copyBtn.addEventListener('click', () => {
+        var codetext = document.querySelector('#show_code').innerHTML
+
+        navigator.clipboard.writeText(codetext)
+        copyBtn.innerHTML = "Copied !"
+    })
+
+
+
+    hljs.highlightAll();
+</script>
+
+{% endblock %}

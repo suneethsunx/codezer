@@ -1,0 +1,47 @@
+{% load static %}
+
+<header>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <img src="{% static 'base/images/logo.png' %}" alt="" width="130">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            {{ request.user }}
+                        </a>
+                        <ul class="dropdown-menu shadow-lg">
+                            <li class="">
+                                <a class="dropdown-item text-light d-flex align-items-center gap-2"
+                                    aria-current="page" href="{% url 'index' %}">
+                                    <span class="iconify    " data-icon="ic:baseline-space-dashboard"></span>
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li><a class="dropdown-item text-light d-flex align-items-center gap-2"
+                                    href="{% url 'logout' %}">
+                                    <span class="iconify" data-icon="majesticons:logout-half-circle"></span>
+                                    Logout</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+                <form class="d-flex" role="search" method="GET" action="{% url 'search' %}">
+                    <input class="w-100 me-2 rounded" {% if global_query %} value="{{ global_query }}" {% endif %} name="query" type="search" placeholder="Search for codes globaly..."
+                        aria-label="Search">
+                    <button class="btn btn-sm btn-primary" type="submit">
+                        <span class="iconify fs-4" data-icon="fluent:globe-search-24-regular"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
